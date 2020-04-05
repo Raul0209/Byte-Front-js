@@ -14,7 +14,7 @@ export class EmpresasComponent implements OnInit {
   public modalEditar: boolean = false;
   public modalNueva: boolean = false;
   public empresaModel: Empresa;
-  public empresas = []
+  public empresas = [];
   public CODEMPRESA;
 
   ngOnInit() {
@@ -23,6 +23,8 @@ export class EmpresasComponent implements OnInit {
 
   abrirModalEliminar(id) {
     this.CODEMPRESA = id;
+    console.log(id);
+
     this.modalEliminar = true;
   }
 
@@ -32,16 +34,18 @@ export class EmpresasComponent implements OnInit {
   }
 
   abrirModalEditar(id) {
+    this.limpiarModelo();
     this.CODEMPRESA = id;
     this.modalEditar = true;
   }
 
   cerrarModalEditarAcceso() {
-    this.modalEditar = false
-    this.limpiarModelo()
+    this.modalEditar = false;
+    this.limpiarModelo();
   }
 
   abrirModalNuevaEmpresa() {
+    this.limpiarModelo();
     this.modalNueva = true;
   }
   cerrarModalNuevaEmpresa() {
@@ -66,13 +70,18 @@ export class EmpresasComponent implements OnInit {
     this.modalEditar = false;
   }
 
-  createEmpresa() {
+  async createEmpresa() {
     var UID = "uid" + Math.floor(Math.random() * 999);
-    this.empresaModel.CODEMPRESA = UID.toString();;
+    this.empresaModel.CODEMPRESA = await UID.toString();;
 
-    this.empresas.push(this.empresaModel);
+    await this.empresas.push(this.empresaModel);
     this.modalNueva = false;
     console.log(this.empresas);
   }
 
+  async deleteEmpresa() {
+    await this.empresas.splice(this.CODEMPRESA, 1);
+    this.modalEliminar = false;
+    this.CODEMPRESA = null;
+  }
 }
