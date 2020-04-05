@@ -1,0 +1,59 @@
+<div class="main-container">
+    <header class="header header-6 head">
+        <span class="title">Byte Solutions</span>
+    </header>
+    <div class="content-container">
+        <nav class="sidenav">
+            <section class="sidenav-content">
+
+                <section class="nav-group collapsible">
+                    <input id="tabexample1" type="checkbox">
+                    <label for="tabexample1">Mantenimientos</label>
+                    <ul class="nav-list">
+                        <li><a class="nav-link">Empresas</a></li>
+
+                    </ul>
+                </section>
+            </section>
+        </nav>
+        <div class="content-area">
+
+            <div style="text-align: center;">
+                <div style="display: inline-block;">
+                    <h1>Gestionando Empresas</h1>
+                </div>
+
+                <div *ngIf="cargando" class="progress loop"><progress></progress></div>
+
+                <div style="display: inline-block; margin-left: 10%;">
+                    <button (click)='abrirModalNuevo()' type="button" class="btn btn-icon btn-success" aria-label="home">
+                        <clr-icon shape="plus"></clr-icon>
+                    </button>
+                </div>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Codigo Empresa</th>
+                        <th>Nombre</th>
+                        <th>Nit</th>
+                        <th>Fecha Fundacion</th>
+                        <th>Direccion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>12</td>
+                        <td>Byte</td>
+                        <td>8546-6</td>
+                        <td>11/2/2015</td>
+                        <td>4 avenida "A" 28-48 Zona 3</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+</div>
