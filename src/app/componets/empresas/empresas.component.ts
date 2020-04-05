@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Empresa } from 'src/app/models/empresa.model';
 
 @Component({
   selector: 'app-empresas',
@@ -9,42 +10,69 @@ export class EmpresasComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-    this.saveEmpresa();
-    
-  }
-  
-  saveEmpresa() { 
-    localStorage.Empresa = {}
-    console.log(localStorage);
-   }
+  public modalEliminar: boolean = false;
+  public modalEditar: boolean = false;
+  public modalNueva: boolean = false;
+  public empresaModel: Empresa;
+  public empresas = []
+  public CODEMPRESA;
 
-   local2json(name){
-    // asignamos un valor o recuperamos datos almacenados
-    let DB = (localStorage.getItem(name))?JSON.parse(localStorage.getItem(name)):[];
-  
-    /* metodos */
-    return{
-      // obtener todos los datos de la coleccion
-      get : ()=>{
-        return DB;
-      },
-      // ingresar nuevos datos
-      push  : (obj)=>{
-        DB.push(obj);
-        localStorage.setItem(name,JSON.stringify(DB));
-      },
-      // ingresar una nueva coleccion
-      set : (colection)=>{
-        DB = colection;
-        localStorage.setItem(name,JSON.stringify(DB));
-      },
-      // eliminar todos los datos de la coleccion
-      delete  : ()=>{
-        DB = [];
-        localStorage.setItem(name,JSON.stringify(DB));
-      }
-    }
+  ngOnInit() {
+    this.empresaModel = new Empresa(null, null, null, null, null);
+  }
+
+  abrirModalEliminar(id) {
+    this.CODEMPRESA = id;
+    this.modalEliminar = true;
+  }
+
+  cerrarModalEliminarAcceso() {
+    this.modalEliminar = false;
+    this.limpiarModelo();
+  }
+
+  abrirModalEditar(id) {
+    this.CODEMPRESA = id;
+    this.modalEditar = true;
+  }
+
+  cerrarModalEditarAcceso() {
+    this.modalEditar = false
+    this.limpiarModelo()
+  }
+
+  abrirModalNuevaEmpresa() {
+    this.modalNueva = true;
+  }
+  cerrarModalNuevaEmpresa() {
+    this.modalNueva = false;
+    this.limpiarModelo();
+  }
+
+  limpiarModelo() {
+    this.empresaModel.CODEMPRESA = null;
+    this.empresaModel.DIRECCION = null;
+    this.empresaModel.FECHAFUNDACION = null;
+    this.empresaModel.NIT = null;
+    this.empresaModel.NOMBRE = null;
+    this.CODEMPRESA = null;
+  }
+
+  updateEmpresa() {
+    this.empresas[this.CODEMPRESA].NOMBRE = this.empresaModel.NOMBRE;
+    this.empresas[this.CODEMPRESA].DIRECCION = this.empresaModel.DIRECCION;
+    this.empresas[this.CODEMPRESA].FECHAFUNDACION = this.empresaModel.FECHAFUNDACION;
+    this.empresas[this.CODEMPRESA].NIT = this.empresaModel.NIT;
+    this.modalEditar = false;
+  }
+
+  createEmpresa() {
+    var UID = "uid" + Math.floor(Math.random() * 999);
+    this.empresaModel.CODEMPRESA = UID.toString();;
+
+    this.empresas.push(this.empresaModel);
+    this.modalNueva = false;
+    console.log(this.empresas);
   }
 
 }

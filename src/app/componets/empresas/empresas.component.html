@@ -26,7 +26,7 @@
                 <div *ngIf="cargando" class="progress loop"><progress></progress></div>
 
                 <div style="display: inline-block; margin-left: 10%;">
-                    <button (click)='abrirModalNuevo()' type="button" class="btn btn-icon btn-success" aria-label="home">
+                    <button (click)='abrirModalNuevaEmpresa()' type="button" class="btn btn-icon btn-success" aria-label="home">
                         <clr-icon shape="plus"></clr-icon>
                     </button>
                 </div>
@@ -40,20 +40,166 @@
                         <th>Nit</th>
                         <th>Fecha Fundacion</th>
                         <th>Direccion</th>
+                        <th>Eliminar</th>
+                        <th>Editar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>12</td>
-                        <td>Byte</td>
-                        <td>8546-6</td>
-                        <td>11/2/2015</td>
-                        <td>4 avenida "A" 28-48 Zona 3</td>
+                    <tr *ngFor='let empresa of empresas; let i = index;'>
+                        <td>{{empresa.CODEMPRESA}}</td>
+                        <td>{{empresa.NOMBRE}}</td>
+                        <td>{{empresa.NIT}}</td>
+                        <td>{{empresa.FECHAFUNDACION}}</td>
+                        <td>{{empresa.DIRECCION}}</td>
+                        <td (click)='abrirModalEliminar(i)'>
+                            <clr-icon shape="trash"></clr-icon>
+                        </td>
+                        <td (click)='abrirModalEditar(i)'>
+                            <clr-icon shape="pencil"></clr-icon>
+                        </td>
                     </tr>
                 </tbody>
             </table>
-
-
         </div>
     </div>
 </div>
+
+
+<!-- Modal para eliminar -->
+<clr-modal [(clrModalOpen)]="modalEliminar">
+
+    <h3 class="modal-title">¿Eliminando Empresa</h3>
+
+    <div class="modal-body">
+
+        <div *ngIf="cargando" class="progress loop"><progress></progress></div>
+
+        <div class="alert alert-info" role="alert">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="info-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">Esta accion no se puede deshacer</span>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="cerrarModalEliminarAcceso()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="deleteAcceso()">Eliminar</button>
+    </div>
+</clr-modal>
+
+<!-- Modal Editar -->
+<clr-modal [(clrModalOpen)]="modalEditar" [clrModalSize]="'lg'">
+
+    <h3 class="modal-title">¿Editando una empresa?</h3>
+
+    <div class="modal-body">
+        <div *ngIf="cargando" class="progress loop"><progress></progress></div>
+        <div class="alert alert-info" role="alert">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="info-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">Recuerda proporcionar los datos correctamente.</span>
+
+                </div>
+            </div>
+
+        </div>
+
+        <br>
+
+        <form clrForm #editarForm='ngForm'>
+
+            <clr-input-container>
+                <label>Nombre</label>
+                <input type="text" clrInput placeholder="" name="name" [(ngModel)]="empresaModel.NOMBRE" />
+            </clr-input-container>
+
+            <clr-input-container>
+                <label>Nit</label>
+                <input type="text" clrInput placeholder="" name="name" [(ngModel)]="empresaModel.NIT" />
+            </clr-input-container>
+
+            <clr-input-container>
+                <label>Direccion</label>
+                <input type="text" clrInput placeholder="" name="name" [(ngModel)]="empresaModel.DIRECCION" />
+            </clr-input-container>
+
+            <clr-date-container>
+                <label>Fecha de fundacion</label>
+                <input type="date" clrDate name="demo" [(ngModel)]="empresaModel.FECHAFUNDACION">
+            </clr-date-container>
+
+        </form>
+        <br><br><br><br><br><br><br>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-outline" (click)="cerrarModalEditarAcceso()">Cancelar</button>
+        <button class="btn btn-outline" [disabled]='!empresaModel.FECHAFUNDACION || !empresaModel.DIRECCION || !empresaModel.NIT || !empresaModel.NOMBRE' (click)="updateEmpresa()">Aceptar</button>
+    </div>
+
+</clr-modal>
+
+<!-- Modal Nuevo -->
+<clr-modal [(clrModalOpen)]="modalNueva" [clrModalSize]="'lg'">
+
+    <h3 class="modal-title">Nueva empresa</h3>
+
+    <div class="modal-body">
+        <div *ngIf="cargando" class="progress loop"><progress></progress></div>
+        <div class="alert alert-info" role="alert">
+            <div class="alert-items">
+                <div class="alert-item static">
+                    <div class="alert-icon-wrapper">
+                        <clr-icon class="alert-icon" shape="info-circle"></clr-icon>
+                    </div>
+                    <span class="alert-text">Recuerda proporcionar los datos correctamente.</span>
+
+                </div>
+            </div>
+
+        </div>
+
+        <br>
+
+        <form clrForm #editarForm='ngForm'>
+
+            <clr-input-container>
+                <label>Nombre</label>
+                <input type="text" clrInput placeholder="" name="name" [(ngModel)]="empresaModel.NOMBRE" />
+            </clr-input-container>
+
+            <clr-input-container>
+                <label>Nit</label>
+                <input type="text" clrInput placeholder="" name="name" [(ngModel)]="empresaModel.NIT" />
+            </clr-input-container>
+
+            <clr-input-container>
+                <label>Direccion</label>
+                <input type="text" clrInput placeholder="" name="name" [(ngModel)]="empresaModel.DIRECCION" />
+            </clr-input-container>
+
+            <clr-date-container>
+                <label>Fecha de fundacion</label>
+                <input type="date" clrDate name="demo" [(ngModel)]="empresaModel.FECHAFUNDACION">
+            </clr-date-container>
+
+        </form>
+        <br><br><br><br><br><br><br>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-outline" (click)="cerrarModalNuevaEmpresa()">Cancelar</button>
+        <button class="btn btn-outline" [disabled]='!empresaModel.FECHAFUNDACION || !empresaModel.DIRECCION || !empresaModel.NIT || !empresaModel.NOMBRE' (click)="createEmpresa()">Aceptar</button>
+    </div>
+
+</clr-modal>
